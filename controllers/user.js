@@ -4,7 +4,6 @@ const {
   BAD_REQUEST,
   NOT_FOUND,
   ERROR_CREATED,
-  ERROR_CODE,
 } = require('../utils/errors/errors');
 
 module.exports.getUsers = (req, res) => {
