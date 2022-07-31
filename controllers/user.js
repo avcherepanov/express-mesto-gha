@@ -4,12 +4,13 @@ const {
   BAD_REQUEST,
   NOT_FOUND,
   ERROR_CREATED,
+  ERROR_CODE,
 } = require('../utils/errors/errors');
 
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((user) => res.send({ data: user }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка!' }));
+    .catch(() => res.status(ERROR_CODE).send({ message: 'Произошла ошибка!' }));
 };
 
 module.exports.getUsersById = (req, res) => {
@@ -26,7 +27,7 @@ module.exports.getUsersById = (req, res) => {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка на сервере' });
+      res.status(ERROR_CODE).send({ message: 'Произошла ошибка на сервере' });
     });
 };
 
@@ -39,7 +40,7 @@ module.exports.createUser = (req, res) => {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
         return;
       }
-      res.status(500).send({ message: 'Ошибка на сервере.' });
+      res.status(ERROR_CODE).send({ message: 'Ошибка на сервере.' });
     });
 };
 
@@ -59,7 +60,7 @@ module.exports.updateProfile = (req, res) => {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
         return;
       }
-      res.status(500).send({ message: 'Ошибка на сервере.' });
+      res.status(ERROR_CODE).send({ message: 'Ошибка на сервере.' });
     });
 };
 
@@ -79,6 +80,6 @@ module.exports.updateAvatar = (req, res) => {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
         return;
       }
-      res.status(500).send({ message: 'Ошибка на сервере.' });
+      res.status(ERROR_CODE).send({ message: 'Ошибка на сервере.' });
     });
 };
