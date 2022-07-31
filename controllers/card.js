@@ -9,7 +9,7 @@ const {
 module.exports.getCards = (req, res) => {
   Card.find({})
     .then((card) => res.send({ data: card }))
-    .catch(() => res.status(500).send({ message: 'Ошибка' }));
+    .catch(() => res.status(ERROR_CODE).send({ message: 'Ошибка' }));
 };
 
 module.exports.createCard = (req, res) => {
@@ -23,7 +23,7 @@ module.exports.createCard = (req, res) => {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
         return;
       }
-      res.status(500).send({ message: 'Ошибка' });
+      res.status(ERROR_CODE).send({ message: 'Ошибка' });
     });
 };
 
@@ -43,7 +43,7 @@ module.exports.deleteCard = (req, res) => {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
         return;
       }
-      res.status(500).send({ message: 'Ошибка' });
+      res.status(ERROR_CODE).send({ message: 'Ошибка' });
     });
 };
 
@@ -63,7 +63,7 @@ module.exports.likeCard = (req, res) => {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
         return;
       }
-      res.status(500).send({ message: 'Ошибка' });
+      res.status(ERROR_CODE).send({ message: 'Ошибка' });
     });
 };
 
@@ -83,6 +83,6 @@ module.exports.dislikeCard = (req, res) => {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
         return;
       }
-      res.status(500).send({ message: 'Ошибка' });
+      res.status(ERROR_CODE).send({ message: 'Ошибка' });
     });
 };
