@@ -45,7 +45,7 @@ jobs:
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.6.0
       with:
-        mongodb-version: '4.4'
+        mongodb-version: '4.2'
     - name: Get testing lib
       run: set -eu && git clone --depth 1 https://github.com/Yandex-Practicum/web-autotest-public.git
     - name: Copy Makefile
