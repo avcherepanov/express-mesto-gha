@@ -1,6 +1,7 @@
 const Card = require('../models/card');
 
 const {
+  ERROR_CODE,
   BAD_REQUEST,
   NOT_FOUND,
   ERROR_CREATED,
