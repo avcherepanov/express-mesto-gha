@@ -54,6 +54,10 @@ app.use((err, req, res) => {
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
+app.listen(PORT, () => {
+
+});
+
 //  .then(() => {
 //    app.listen(PORT, () => {
 //      console.log(`App started on ${PORT} port`);
