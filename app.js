@@ -52,14 +52,11 @@ app.use((err, req, res) => {
     });
 });
 
-mongoose.connect('mongodb://localhost:27017/mestodb', {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-})
+mongoose.connect('mongodb://localhost:27017/mestodb');
 
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`App started on ${PORT} port`);
-    });
-  })
-  .catch((e) => console.log(e));
+//  .then(() => {
+//    app.listen(PORT, () => {
+//      console.log(`App started on ${PORT} port`);
+//    });
+//  })
+//  .catch((e) => console.log(e));
