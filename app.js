@@ -40,7 +40,7 @@ app.use(auth, (req, res, next) => next(new NotFound('Страница не на�
 
 app.use(errors());
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   const { statusCode = 500, message } = err;
 
   res
