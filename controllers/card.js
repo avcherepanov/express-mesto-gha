@@ -1,89 +1,97 @@
 const Card = require('../models/card');
+const BadRequest = require('../utils/errors/bad-request');
+const NotFound = require('../utils/errors/not-found');
+const RightsError = require('../utils/errors/rights-error');
 
-const {
-  ERROR_CODE,
-  BAD_REQUEST,
-  NOT_FOUND,
-  ERROR_CREATED,
-} = require('../utils/errors/errors');
-
-module.exports.getCards = (req, res) => {
+module.exports.getCards = (req, res, next) => {
   Card.find({})
     .then((card) => res.send({ data: card }))
-    .catch(() => res.status(ERROR_CODE).send({ message: 'Ошибка' }));
+    .catch(next);
 };
 
-module.exports.createCard = (req, res) => {
+module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
 
   Card.create({ name, link, owner })
-    .then((card) => res.status(ERROR_CREATED).send({ data: card }))
+    .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
-        return;
+        next(new BadRequest('Переданы некорректные данные'));
+      } else {
+        next(err);
       }
-      res.status(ERROR_CODE).send({ message: 'Ошибка' });
     });
 };
 
-module.exports.deleteCard = (req, res) => {
+module.exports.deleteCard = (req, res, next) => {
   const { cardId } = req.params;
 
-  Card.findByIdAndRemove(cardId)
+  Card.findById(cardId)
     .then((card) => {
       if (!card) {
-        res.status(NOT_FOUND).send({ message: "Запрашиваемая карточка не найдена!" });
-        return;
+        throw new NotFound('Карточка не найдена!');
+      } else {
+        const owner = card.owner.toString();
+        if (owner !== req.user._id) {
+          throw new RightsError('Это не ваша карточка');
+        } else {
+          Card.findByIdAndRemove(req.params.cardId)
+            .then(() => {
+              res.send({ message: 'Карточка удалена' });
+            });
+        }
       }
-      res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
-        return;
+        next(new BadRequest('Переданы некорректные данные'));
+      } else {
+        next(err);
       }
-      res.status(ERROR_CODE).send({ message: 'Ошибка' });
     });
 };
 
-module.exports.likeCard = (req, res) => {
+module.exports.likeCard = (req, res, next) => {
   const { cardId } = req.params;
   const userId = req.user._id;
-  Card.findByIdAndUpdate(cardId, { $addToSet: { likes: userId } }, { new: true })
+  Card.findByIdAndUpdate(
+    cardId,
+    { $addToSet: { likes: userId } },
+    { new: true },
+  )
     .then((card) => {
       if (!card) {
-        res.status(NOT_FOUND).send({ message: "Запрашиваемая карточка не найдена!" });
-        return;
+        next(new NotFound('Карточка не найдена!'));
+      } else {
+        res.send({ data: card });
       }
-      res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
-        return;
+        next(new BadRequest('Переданы некорректные данные'));
+      } else {
+        next(err);
       }
-      res.status(ERROR_CODE).send({ message: 'Ошибка' });
     });
 };
 
-module.exports.dislikeCard = (req, res) => {
+module.exports.dislikeCard = (req, res, next) => {
   const { cardId } = req.params;
   const userId = req.user._id;
   Card.findByIdAndUpdate(cardId, { $pull: { likes: userId } }, { new: true })
     .then((card) => {
       if (!card) {
-        res.status(NOT_FOUND).send({ message: "Запрашиваемая карточка не найдена!" });
-        return;
+        next(new NotFound('Карточка не найдена!'));
+      } else {
+        res.send({ data: card });
       }
-      res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
-        return;
+        next(new BadRequest('Переданы некорректные данные'));
+      } else {
+        next(err);
       }
-      res.status(ERROR_CODE).send({ message: 'Ошибка' });
     });
 };
