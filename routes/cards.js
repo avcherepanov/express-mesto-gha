@@ -9,12 +9,14 @@ const {
   dislikeCard,
 } = require('../controllers/card');
 
+const { urlValidator } = require('../utils/validateURL/validateURL');
+
 cardRouter.get('/', getCards);
 
 cardRouter.post('/', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(20),
-    link: Joi.string().required().min(2).max(20),
+    link: Joi.string().required().custom(urlValidator),
   }),
 }), createCard);
 
