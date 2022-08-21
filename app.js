@@ -40,7 +40,7 @@ app.use(auth, (req, res, next) => next(new NotFound('Страница не на�
 
 app.use(errors());
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
 
   res
@@ -50,6 +50,7 @@ app.use((err, req, res) => {
         ? 'На сервере произошла ошибка'
         : message,
     });
+  next();
 });
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
