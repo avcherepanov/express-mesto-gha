@@ -9,7 +9,7 @@ const {
   dislikeCard,
 } = require('../controllers/card');
 
-const { urlValidator } = require('../utils/validateURL/validateURL');
+const urlValidator = require('../utils/validateURL/validateURL');
 
 cardRouter.get('/', getCards);
 
